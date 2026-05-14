@@ -1,110 +1,84 @@
+import React, { useEffect, useRef } from "react";
 
-import { useRef, useEffect } from 'react';
+export const Create = ({ addStudent, edit, setTab, updateStudent }) => {
 
-export const Create = ({ addStudent, editStudent, updateStudent, setEditStudent }) => {
-    
+  const name = useRef();
+  const city = useRef();
+  const age = useRef();
 
-    const name = useRef()
-    const age = useRef()
-    const city = useRef()
+  useEffect(() => {
+    if (edit?.name) {
+      name.current.value = edit.name;
+      city.current.value = edit.city;
+      age.current.value = edit.age;
+    }
+  }, [edit]);
 
-    useEffect(() => {
-        if(editStudent) {
-            name.current.value = editStudent.name
-            age.current.value = editStudent.age
-            city.current.value = editStudent.city
-        } else {
-            name.current.value = ""
-            age.current.value = ""
-            city.current.value = ""
-        }
-    }, [editStudent])
+  const submitHandler = (e) => {
+    e.preventDefault();
 
-    const submitHandler = (e) => {
-        e.preventDefault()        
+    const data = {
+      name: name.current.value,
+      city: city.current.value,
+      age: age.current.value,
+    };
 
-        var data = {
-                "name" : name.current.value,
-                "age" : age.current.value,
-                "city" : city.current.value
-
-        }
-
-        if(editStudent) {
-            updateStudent(editStudent.name, data)
-        } else {
-            addStudent(data)
-        }
+=
+    if (edit?.name) {
+      updateStudent({ ...data, id: edit.id });
+    } else {
+      addStudent(data);
     }
 
-    const cancelEdit = () => {
-        setEditStudent(null)
-        name.current.value = ""
-        age.current.value = ""
-        city.current.value = ""
-    }
+    name.current.value = "";
+    city.current.value = "";
+    age.current.value = "";
+  };
 
-  
+  return <>
+    <div className="container mt-5">
+      <div className="card shadow">
+        <div className="card-header bg-primary text-white">
+          <h3>{edit?.name ? "Update Student" : "Add Student"}</h3>
+        </div>
 
-
-    return <>
-    <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">
-              </div>
-
-            <div className="card-body">
-              <form onSubmit={submitHandler}>
-                <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="form-control"
-                    placeholder="Enter name"
-                    required
-                    ref={name}/>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Age</label>
-                  <input
-                    type="number"
-                    name="age"
-                    className="form-control"
-                    placeholder="Enter age"
-                    required
-                    ref={age}
-                  />
-                </div>
-
-              
-                <div className="mb-3">
-                  <label className="form-label">City</label>
-                  <input
-                    type="text"
-                    name="city"              
-                    className="form-control"
-                    placeholder="Enter city"
-                    required
-                    ref={city}
-                  />
-                </div>
-
-              
-                <div className="d-flex gap-2">
-                  <button type="submit" className="btn btn-success flex-grow-1">
-                    {editStudent ? 'Update Student' : 'Register Student'}
-                  </button>
-                  {editStudent && <button type="button" onClick={cancelEdit} className="btn btn-secondary">
-                    Cancel
-                  </button>}
-                </div>
-              </form>
+        <div className="card-body">
+          <form onSubmit={submitHandler}>
+            <div className="mb-3">
+              <label className="form-label">Name</label>
+              <input type="text" className="form-control" ref={name} />
             </div>
-          </div>
+
+            <div className="mb-3">
+              <label className="form-label">City</label>
+              <input type="text" className="form-control" ref={city} />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Age</label>
+              <input type="number" className="form-control" ref={age} />
+            </div>
+
+            <div className="d-flex gap-2">
+
+              <button type="submit" className="btn btn-success flex-grow-1">
+                {edit?.name ? "Update Student Details" : "Add Student Details"}
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setTab("display")}
+              >
+                View Students
+              </button>
+
+            </div>
+
+          </form>
         </div>
       </div>
-    </>
-}
+    </div>
+ </>
+
+export default Create;

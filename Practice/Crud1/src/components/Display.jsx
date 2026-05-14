@@ -1,49 +1,44 @@
-import { List } from "./List";
+import List from "./List"
 
-export const Display = ({ student, deleteStudent, EditHandler }) => {
 
+export const Display = ({students, deleteStudent, editStudent, setTab}) => {
   return <>
-    <div className="row mt-5">
-      <div className="col-12">
-        <div className="card shadow">
-          <div className="card-header bg-dark text-white">
-            <h4 className="mb-0">Student List</h4>
-          </div>
+        <div className="container mt-5">
+      <div className="card shadow">
+         <div className="d-flex justify-content-between align-items-center mb-3">
+                <h4 className="text-success">Student Records</h4>
 
-          <div className="card-body">
-            <table className="table table-bordered table-striped table-hover">
+                <button type="reset" className="btn btn-secondary" onClick={() => setTab("create")}>
+                    Add Student
+                </button>
+            </div>
+
+         <div className="card-body">
+          {students.length === 0 ? (
+            <h5 className="text-center text-muted my-4">No data found</h5>
+          ) : (
+            <table className="table table-bordered table-hover">
               <thead className="table-primary">
                 <tr>
-
                   <th>Name</th>
-                  <th>Age</th>
                   <th>City</th>
-                  <th>Action</th>
+                  <th>Age</th>
+                  <th width="200">Action</th>
                 </tr>
               </thead>
 
               <tbody>
-                {student.length > 0 ? (
-                  student.map(ele => (
-                    <List
-                      key={ele.name}
-                      ele={ele}
-                      deleteStudent={deleteStudent}
-                      EditHandler={EditHandler}
-                    />
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="text-center text-dark fw-bold">
-                      Data Not Found
-                    </td>
-                  </tr>
-                )}
+                
+                  {students.map((ele, index) => <List key={index} ele={ele} deleteStudent={deleteStudent} editStudent={editStudent}/>) }          
               </tbody>
             </table>
-          </div>
+          )}
         </div>
       </div>
     </div>
-  </>
+
+    </>
+
 }
+
+export default Display
